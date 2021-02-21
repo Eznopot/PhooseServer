@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent
 
 class EventHandler {
     val parser = Parser()
+    val robot: Robot = Robot()
 
     fun handleEvent(event : String) {
         val cmd = parser.parseResponse(event)
@@ -16,6 +17,8 @@ class EventHandler {
             moveCursor(x, y, first)
         } else if (cmd == "click") {
             makeClick(parser.getTypeValue(event))
+        } else if (cmd == "release") {
+            makeRelease(parser.getTypeValue(event))
         } else if (cmd == "copy") {
             makeShortCut("copy")
         } else if (cmd == "paste") {
@@ -25,7 +28,6 @@ class EventHandler {
 
     private fun moveCursor(posX : Int, posY : Int, first : Boolean) {
         val p: Point = MouseInfo.getPointerInfo().location
-        val robot: Robot = Robot()
         if (!first) {
             robot.mouseMove(p.x + (posX - lastPosX), p.y + (posY - lastPosY));
         }
@@ -34,26 +36,28 @@ class EventHandler {
     }
 
     private fun makeClick(type : String) {
-        val robot: Robot = Robot()
         if (type == "left") {
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
         } else if (type == "right") {
             robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+        }
+    }
+
+    private fun makeRelease(type : String) {
+        if (type == "left") {
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        } else if (type == "right") {
             robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
         }
     }
 
     private fun makeShortCut(type : String) {
-        val robot: Robot = Robot()
         if (type == "copy") {
-            println("copy")
             robot.keyPress(KeyEvent.VK_CONTROL)
             robot.keyPress(KeyEvent.VK_C)
             robot.keyRelease(KeyEvent.VK_C)
             robot.keyRelease(KeyEvent.VK_CONTROL)
         } else if (type == "paste") {
-            println("paste")
             robot.keyPress(KeyEvent.VK_CONTROL)
             robot.keyPress(KeyEvent.VK_V)
             robot.keyRelease(KeyEvent.VK_V)

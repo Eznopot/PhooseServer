@@ -19,6 +19,8 @@ class EventHandler {
             makeClick(parser.getTypeValue(event))
         } else if (cmd == "release") {
             makeRelease(parser.getTypeValue(event))
+        } else if (cmd == "scroll") {
+            makeScroll(parser.getYValue(event))
         } else if (cmd == "copy") {
             makeShortCut("copy")
         } else if (cmd == "paste") {
@@ -63,6 +65,12 @@ class EventHandler {
             robot.keyRelease(KeyEvent.VK_V)
             robot.keyRelease(KeyEvent.VK_CONTROL)
         }
+    }
+
+    private fun makeScroll(y : Int) {
+        val mY = (y - lastPosY) / 10
+        robot.mouseWheel(mY)
+        lastPosY = y
     }
 
     companion object {

@@ -40,7 +40,6 @@ class UDPServeur() {
         try {
             socket!!.receive(packet)
             msg = String(packet.data)
-            println("open fun receiveUDP packet received = $msg")
         } catch (e: Exception) {
             println("open fun receiveUDP catch exception." + e.toString())
             e.printStackTrace()
